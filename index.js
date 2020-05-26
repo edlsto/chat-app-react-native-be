@@ -6,9 +6,11 @@ const port = 3000;
 
 io.on("connection", (socket) => {
   console.log("A user connected");
-  socket.on("chat message", (msg) => {
-    console.log(msg);
-    io.emit("chat message", msg);
+  socket.on("joinRoom", (personName) => {
+    socket.join(personName);
+    socket.on("chat message", (msg) => {
+      io.to(personName).emit("chat message", msg);
+    });
   });
 });
 
